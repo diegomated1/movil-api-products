@@ -11,7 +11,7 @@ export const handle_auth = async (req: Request, res: Response, next: NextFunctio
 
         var token = token_bearer[1];
         var user = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-        if(user.id_user){
+        if(user.id_user==undefined){
             throw 'Invalid token';
         }else{
             res.locals.id_user = user.id_user;
