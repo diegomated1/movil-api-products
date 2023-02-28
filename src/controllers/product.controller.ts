@@ -42,6 +42,17 @@ export const insert = async (req: Request, res: Response)=>{
     }
 }
 
+export const getFavorites = async (req: Request, res: Response)=>{
+    try{
+        const {id_user} = res.locals;
+        const products = await Product.getFavorites(id_user);
+        res.status(200).json({error: 0, products});
+    }catch(error){
+        console.log(error);
+        res.status(500).json({error: 1, message: 'Internal server error.'});
+    }
+}
+
 export const addFavorite = async (req: Request, res: Response)=>{
     try{
         const {id_product} = req.params;
