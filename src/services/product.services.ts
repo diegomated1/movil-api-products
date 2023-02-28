@@ -38,24 +38,36 @@ export const getAll = () : Promise<IProduct[]> => {
     });
 }
 
-export const addFavorite = (id_product:string, id_user:string) : Promise<IProduct[]> => {
+export const getFavorites = (id_user:string) : Promise<{id_product:string,id_user:string}[]> => {
     return new Promise(async(res, rej)=>{
         try{
-            const query = `INSERT INTO products_by_favorite(id_product, id_user) VALUES (?,?)`;
-            const query_result = await client.execute(query, [id_product, id_user], {prepare: true});
-            res(query_result.rows as unknown as IProduct[]);
+            const query = `SELECT * FROM products_by_favorite WHERE id_user = ?`;
+            const query_result = await client.execute(query, [id_user], {prepare: true});
+            res(query_result.rows as unknown as {id_product:string,id_user:string}[]);
         }catch(error){
             rej(error);
         }
     });
 }
 
-export const deleteFavorite = (id_product:string, id_user:string) : Promise<IProduct[]> => {
+export const addFavorite = (id_product:string, id_user:string) => {
+    return new Promise(async(res, rej)=>{
+        try{
+            const query = `INSERT INTO products_by_favorite(id_product, id_user) VALUES (?,?)`;
+            const query_result = await client.execute(query, [id_product, id_user], {prepare: true});
+            res(query_result.rows);
+        }catch(error){
+            rej(error);
+        }
+    });
+}
+
+export const deleteFavorite = (id_product:string, id_user:string) => {
     return new Promise(async(res, rej)=>{
         try{
             const query = `DELETE FROM products_by_favorite WHERE id_product = ? AND id_user = ?`;
             const query_result = await client.execute(query, [id_product, id_user], {prepare: true});
-            res(query_result.rows as unknown as IProduct[]);
+            res(query_result.rows);
         }catch(error){
             rej(error);
         }
