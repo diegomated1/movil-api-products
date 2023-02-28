@@ -41,3 +41,37 @@ export const insert = async (req: Request, res: Response)=>{
         res.status(500).json({error: 1, message: 'Internal server error.'});
     }
 }
+
+export const addFavorite = async (req: Request, res: Response)=>{
+    try{
+        const {id_product} = req.params;
+        const {id_user} = res.locals;
+        const product = await Product.getById(id_product);
+        if(product){
+            await Product.addFavorite(id_product, id_user);
+            res.status(200).json({error: 0, message: 'Product add to favorites'});
+        }else{
+            res.status(404).json({error: 2, message: 'Product not found'});
+        }
+    }catch(error){
+        console.log(error);
+        res.status(500).json({error: 1, message: 'Internal server error.'});
+    }
+}
+
+export const deleteFavorite = async (req: Request, res: Response)=>{
+    try{
+        const {id_product} = req.params;
+        const {id_user} = res.locals;
+        const product = await Product.getById(id_product);
+        if(product){
+            await Product.deleteFavorite(id_product, id_user);
+            res.status(200).json({error: 0, message: 'Product delete from favorites'});
+        }else{
+            res.status(404).json({error: 2, message: 'Product not found'});
+        }
+    }catch(error){
+        console.log(error);
+        res.status(500).json({error: 1, message: 'Internal server error.'});
+    }
+}
