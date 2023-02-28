@@ -13,7 +13,9 @@ app.use(morgan('dev'));
 
 // ROUTER
 import userRouter from './router/user.router.js';
+import productRouter from './router/product.router.js';
 app.use(userRouter);
+app.use(productRouter);
 
 // LISTEN
 app.listen(parseInt(process.env.API_PORT!), process.env.API_HOST!, ()=>{
