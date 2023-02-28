@@ -3,5 +3,6 @@ export default interface IProduct{
     name: string,
     description: string,
     id_seller: string,
+    seller_name: string,
     calification: string
 }
