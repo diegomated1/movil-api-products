@@ -10,7 +10,6 @@ export const getOneById = async (req: Request, res: Response)=>{
         const product = await Product.getById(id_product);
         if(product){
             const seller = await User.getById(product.id_seller);
-            delete seller.password;
             res.status(200).json({error: 0, product: {...product, seller}});
         }else{
             res.status(404).json({error: 2, message: 'Product not found'});
@@ -35,6 +34,7 @@ export const insert = async (req: Request, res: Response)=>{
     try{
         const product = req.body as IProduct;
         const id_product = ui.process();
+        await Product.insert({...product, id_product});
         res.status(200).json({error: 0, message: 'Inserted'});
     }catch(error){
         console.log(error);
