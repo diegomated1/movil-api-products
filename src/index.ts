@@ -12,6 +12,8 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 // ROUTER
+import userRouter from './router/user.router.js';
+app.use(userRouter);
 
 // LISTEN
 app.listen(parseInt(process.env.API_PORT!), process.env.API_HOST!, ()=>{
