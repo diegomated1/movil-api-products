@@ -4,5 +4,5 @@ export default interface IProduct{
     description: string,
     id_seller: string,
     seller_name: string,
-    calification: string
+    calification: number
 }
