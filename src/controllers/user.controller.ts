@@ -2,8 +2,7 @@ import * as User from '../services/user.services.js';
 import {Request, Response} from 'express';
 import ui from 'uniqid';
 import bc from 'bcrypt';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import IUser from 'interfaces/IUser.js';
+import jwt from 'jsonwebtoken';
 
 export const login = async (req: Request, res: Response)=>{
     try{
@@ -37,7 +36,6 @@ export const register = async (req: Request, res: Response)=>{
         }
         const _user = await User.getByEmail(email);
         if(_user){
-            console.log(_user);
             return res.status(400).json({error: 1, message: 'Email already taken'});
         }
         const id_user = ui.process();
