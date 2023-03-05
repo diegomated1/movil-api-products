@@ -54,8 +54,10 @@ export const insert = async (req: Request, res: Response)=>{
 
 export const getFavorites = async (req: Request, res: Response)=>{
     try{
+        var {keys} = req.query;
+        keys = (keys) ? keys : '1';
         const {id_user} = res.locals;
-        const products = await Product.getFavorites(id_user);
+        const products = await Product.getFavorites(id_user, (keys=='0'?1:0));
         res.status(200).json({error: 0, products});
     }catch(error){
         console.log(error);
@@ -69,7 +71,7 @@ export const addFavorite = async (req: Request, res: Response)=>{
         const {id_user} = res.locals;
         const product = await Product.getById(id_product);
         if(product){
-            await Product.addFavorite(id_product, id_user);
+            await Product.addFavorite(product, id_user);
             res.status(200).json({error: 0, message: 'Product add to favorites'});
         }else{
             res.status(404).json({error: 2, message: 'Product not found'});

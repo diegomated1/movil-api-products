@@ -38,10 +38,14 @@ export const getAll = () : Promise<IProduct[]> => {
     });
 }
 
-export const getFavorites = (id_user:string) : Promise<{id_product:string,id_user:string}[]> => {
+export const getFavorites = (id_user:string, type: number) : Promise<{id_product:string,id_user:string}[]> => {
     return new Promise(async(res, rej)=>{
         try{
-            const query = `SELECT * FROM products_by_favorite WHERE id_user = ?`;
+            if(type==0){
+                var query = `SELECT id_product, id_user FROM products_by_favorite WHERE id_user = ?`;
+            }else{
+                var query = `SELECT * FROM products_by_favorite WHERE id_user = ?`;
+            }
             const query_result = await client.execute(query, [id_user], {prepare: true});
             res(query_result.rows as unknown as {id_product:string,id_user:string}[]);
         }catch(error){
@@ -50,11 +54,12 @@ export const getFavorites = (id_user:string) : Promise<{id_product:string,id_use
     });
 }
 
-export const addFavorite = (id_product:string, id_user:string) => {
+export const addFavorite = (product:IProduct, id_user:string) => {
     return new Promise(async(res, rej)=>{
         try{
-            const query = `INSERT INTO products_by_favorite(id_product, id_user) VALUES (?,?)`;
-            const query_result = await client.execute(query, [id_product, id_user], {prepare: true});
+            const params = [product.id_product, product.calification, product.description, product.id_seller, product.name, product.seller_name]
+            const query = `INSERT INTO products_by_favorite(id_user, id_product, calification, description, id_seller, name, seller_name) VALUES (?,?,?,?,?,?,?)`;
+            const query_result = await client.execute(query, [id_user, ...params], {prepare: true});
             res(query_result.rows);
         }catch(error){
             rej(error);
